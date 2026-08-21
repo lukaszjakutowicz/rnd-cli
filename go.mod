@@ -1,4 +1,4 @@
-module rnd-cli
+module github.com/lukaszjakutowicz/rnd-cli
 
 go 1.22.2
 

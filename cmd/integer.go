@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"rnd-cli/internal/generator"
+	"github.com/lukaszjakutowicz/rnd-cli/internal/generator"
 )
 
 func init() {

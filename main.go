@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"rnd-cli/cmd"
+	"github.com/lukaszjakutowicz/rnd-cli/cmd"
 )
 
 func main() {

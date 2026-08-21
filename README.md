@@ -114,4 +114,4 @@ go test ./...    # test
 
 ## License
 
-TBD
+MIT License
