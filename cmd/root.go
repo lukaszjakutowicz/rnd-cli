@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
@@ -16,15 +17,33 @@ type command struct {
 }
 
 var commands []command
-
-// version is set at build time via -ldflags "-X .../cmd.version=...".
-// GoReleaser fills it in with the git tag; local builds fall back to "dev".
 var version = "dev"
 
 // register adds a subcommand to the CLI. Subcommand files call this from an
 // init() function.
 func register(c command) {
 	commands = append(commands, c)
+}
+
+// maxItems is the upper bound accepted by --items.
+const maxItems = 20
+
+// itemsFlag registers the shared --items flag, used by every generator
+// command to control how many values are printed. Default is 1, max is
+// maxItems.
+func itemsFlag(fs *flag.FlagSet) *int {
+	return fs.Int("items", 1, fmt.Sprintf("number of values to generate (max %d)", maxItems))
+}
+
+// validateItems checks the value parsed by itemsFlag.
+func validateItems(items int) error {
+	if items <= 0 {
+		return fmt.Errorf("items must be greater than 0, got %d", items)
+	}
+	if items > maxItems {
+		return fmt.Errorf("items must not be greater than %d, got %d", maxItems, items)
+	}
+	return nil
 }
 
 // Execute parses os.Args and dispatches to the matching subcommand. It
