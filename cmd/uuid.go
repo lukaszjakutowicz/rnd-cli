@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"flag"
 	"fmt"
 
 	"github.com/lukaszjakutowicz/rnd-cli/internal/generator"
@@ -15,11 +16,21 @@ func init() {
 }
 
 func runUUID(args []string) error {
-	id, err := generator.NewUUID()
-	if err != nil {
-		return fmt.Errorf("generating uuid: %w", err)
+	fs := flag.NewFlagSet("uuid", flag.ContinueOnError)
+	items := itemsFlag(fs)
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if err := validateItems(*items); err != nil {
+		return err
 	}
 
-	fmt.Println(id)
+	for i := 0; i < *items; i++ {
+		id, err := generator.NewUUID()
+		if err != nil {
+			return fmt.Errorf("generating uuid: %w", err)
+		}
+		fmt.Println(id)
+	}
 	return nil
 }

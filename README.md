@@ -32,12 +32,11 @@ go run . uuid
 
 | Command | Description | Flags |
 |---|---|---|
-| `uuid` | Generate a random UUID (v4) | — |
-| `string` | Generate a random string | `--length` (default `16`), `--lowercase`, `--uppercase` |
-| `integer` | Generate a random integer in a range | `--min` (default `0`), `--max` (default `100`) |
-| `password` | Generate a random password | `--length` (default `16`), `--mixed-letters`, `--only-digits` |
+| `uuid` | Generate a random UUID (v4) | `--items` (default `1`, max `20`) |
+| `string` | Generate a random string | `--length` (default `16`), `--lowercase` - only lowercase characters, `--uppercase` - only uppercase characters, `--items` (default `1`, max `20`) |
+| `integer` | Generate a random integer in a range | `--min` (default `0`) - minimal value,<br> `--max` (default `100`) - maximum value, `--items` (default `1`, max `20`) - how many items should be generated |
+| `password` | Generate a random password | `--length` (default `16`),<br>`--mixed-letters` - return only letters [a-zA-Z],<br>`--only-digits` - return only digits,<br>`--no-special` - generate without special characters,<br>`--items` (default `1`, max `20`) - how many items should be generated |
 
-`string` draws from mixed-case letters by default; `--lowercase`/`--uppercase` narrow it to one case (mutually exclusive). `password` draws from mixed-case letters and digits by default; `--mixed-letters` narrows it to letters only, `--only-digits` to digits only (also mutually exclusive).
 
 ## Examples
 
@@ -76,11 +75,11 @@ $ rnd-cli integer --min 1 --max 6
 2
 ```
 
-Generate a password (16 mixed-case letters and digits by default):
+Generate a password (16 mixed-case letters, digits, and special characters by default):
 
 ```sh
 $ rnd-cli password
-tkmO4MWFE8FGk9aJ
+:E(#KtA8U,p3;a%B
 ```
 
 Generate a digits-only PIN of a given length:
@@ -88,6 +87,22 @@ Generate a digits-only PIN of a given length:
 ```sh
 $ rnd-cli password --length 6 --only-digits
 073139
+```
+
+Generate a password without special characters:
+
+```sh
+$ rnd-cli password --no-special
+WI3aMkPKU2Nx8rIm
+```
+
+Generate multiple values at once with `--items`:
+
+```sh
+$ rnd-cli string --items 3 --length 8
+nffIPokV
+DnwwLqAV
+HkHkAKfb
 ```
 
 Use a generated value in a script:
