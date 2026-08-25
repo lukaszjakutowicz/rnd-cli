@@ -32,12 +32,12 @@ go run . uuid
 
 | Command | Description | Flags |
 |---|---|---|
-| `uuid` | Generate a random UUID (v4) | — |
-| `string` | Generate a random string | `--length` (default `16`), `--lowercase`, `--uppercase` |
-| `integer` | Generate a random integer in a range | `--min` (default `0`), `--max` (default `100`) |
-| `password` | Generate a random password | `--length` (default `16`), `--mixed-letters`, `--only-digits` |
+| `uuid` | Generate a random UUID (v4) | `--items` (default `1`, max `20`) |
+| `string` | Generate a random string | `--length` (default `16`), `--lowercase`, `--uppercase`, `--items` (default `1`, max `20`) |
+| `integer` | Generate a random integer in a range | `--min` (default `0`), `--max` (default `100`), `--items` (default `1`, max `20`) |
+| `password` | Generate a random password | `--length` (default `16`), `--mixed-letters`, `--only-digits`, `--items` (default `1`, max `20`) |
 
-`string` draws from mixed-case letters by default; `--lowercase`/`--uppercase` narrow it to one case (mutually exclusive). `password` draws from mixed-case letters and digits by default; `--mixed-letters` narrows it to letters only, `--only-digits` to digits only (also mutually exclusive).
+`string` draws from mixed-case letters by default; `--lowercase`/`--uppercase` narrow it to one case (mutually exclusive). `password` draws from mixed-case letters and digits by default; `--mixed-letters` narrows it to letters only, `--only-digits` to digits only (also mutually exclusive). `--items` controls how many values every command prints, one per line (up to 20 per run).
 
 ## Examples
 
@@ -88,6 +88,15 @@ Generate a digits-only PIN of a given length:
 ```sh
 $ rnd-cli password --length 6 --only-digits
 073139
+```
+
+Generate multiple values at once with `--items`:
+
+```sh
+$ rnd-cli string --items 3 --length 8
+nffIPokV
+DnwwLqAV
+HkHkAKfb
 ```
 
 Use a generated value in a script:
