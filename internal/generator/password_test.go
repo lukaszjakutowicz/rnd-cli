@@ -22,27 +22,38 @@ func TestNewPassword_InvalidLength(t *testing.T) {
 	}
 }
 
-func TestNewPassword_DefaultCharsetIsLettersAndDigits(t *testing.T) {
+func TestNewPassword_DefaultCharsetIsLettersDigitsAndSpecials(t *testing.T) {
 	got, err := NewPassword(PasswordOptions{Length: 200})
 	if err != nil {
 		t.Fatalf("NewPassword() returned unexpected error: %v", err)
 	}
 
-	var sawLetter, sawDigit bool
+	var sawLetter, sawDigit, sawSpecial bool
 	for _, r := range got {
 		switch {
 		case (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z'):
 			sawLetter = true
 		case r >= '0' && r <= '9':
 			sawDigit = true
+		case containsRune(specialChars, r):
+			sawSpecial = true
 		default:
 			t.Fatalf("NewPassword() = %q, contains unexpected character %q", got, r)
 		}
 	}
 
-	if !sawLetter || !sawDigit {
-		t.Errorf("NewPassword() = %q, expected a mix of letters and digits", got)
+	if !sawLetter || !sawDigit || !sawSpecial {
+		t.Errorf("NewPassword() = %q, expected a mix of letters, digits, and special characters", got)
 	}
+}
+
+func containsRune(s string, r rune) bool {
+	for _, c := range s {
+		if c == r {
+			return true
+		}
+	}
+	return false
 }
 
 func TestNewPassword_MixedLetters(t *testing.T) {
@@ -55,6 +66,29 @@ func TestNewPassword_MixedLetters(t *testing.T) {
 		if !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z')) {
 			t.Fatalf("NewPassword(MixedLetters: true) = %q, contains non-letter character %q", got, r)
 		}
+	}
+}
+
+func TestNewPassword_NoSpecial(t *testing.T) {
+	got, err := NewPassword(PasswordOptions{Length: 200, NoSpecial: true})
+	if err != nil {
+		t.Fatalf("NewPassword() returned unexpected error: %v", err)
+	}
+
+	var sawLetter, sawDigit bool
+	for _, r := range got {
+		switch {
+		case (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z'):
+			sawLetter = true
+		case r >= '0' && r <= '9':
+			sawDigit = true
+		default:
+			t.Fatalf("NewPassword(NoSpecial: true) = %q, contains unexpected character %q", got, r)
+		}
+	}
+
+	if !sawLetter || !sawDigit {
+		t.Errorf("NewPassword(NoSpecial: true) = %q, expected a mix of letters and digits", got)
 	}
 }
 
