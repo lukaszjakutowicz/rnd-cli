@@ -17,6 +17,10 @@ type command struct {
 
 var commands []command
 
+// version is set at build time via -ldflags "-X .../cmd.version=...".
+// GoReleaser fills it in with the git tag; local builds fall back to "dev".
+var version = "dev"
+
 // register adds a subcommand to the CLI. Subcommand files call this from an
 // init() function.
 func register(c command) {
@@ -34,6 +38,10 @@ func Execute() int {
 	name := os.Args[1]
 	if name == "-h" || name == "--help" {
 		printUsage()
+		return 0
+	}
+	if name == "-v" || name == "--version" {
+		fmt.Println("rnd-cli version " + version)
 		return 0
 	}
 
@@ -57,6 +65,7 @@ func printUsage() {
 	fmt.Println()
 	fmt.Println("Usage:")
 	fmt.Println("  rnd-cli <command> [flags]")
+	fmt.Println("  rnd-cli --version")
 	fmt.Println()
 	fmt.Println("Available Commands:")
 	for _, c := range commands {

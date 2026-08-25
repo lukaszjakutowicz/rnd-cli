@@ -21,12 +21,13 @@ builds:
       - arm64
     ldflags:
       - -s -w
+      - -X github.com/lukaszjakutowicz/rnd-cli/cmd.version={{ .Version }}
 
 archives:
   - id: rnd-cli
     formats: [tar.gz]
     name_template: >-
-      {{ .ProjectName }}_{{ .Os }}_{{ .Arch }}
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
     format_overrides:
       - goos: windows
         formats: [zip]

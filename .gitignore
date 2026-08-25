@@ -1,5 +1,19 @@
+# Code coverage
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Workspace
+go.work
+go.work.sum
+
+# Editor
 .idea
+
+# Helpers
 CLAUDE.md
 
 # Build output
 /rnd-cli
+/dist/
